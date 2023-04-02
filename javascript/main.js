@@ -9,7 +9,7 @@ document.getElementById("reset-btn").onclick = ()=>{
     localStorage.clear();
 };
 window.onload = ()=> {
-    if(productsString !== null){
+    if(localStorage.products !== undefined){
         products = JSON.parse(localStorage.products);
     }
 };
