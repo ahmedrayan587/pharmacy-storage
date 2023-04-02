@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="container my-5">
+      <form id="product-form">
+        <div class="form-group">
+          <label for="product-name">Product Name:</label>
+          <input type="text" class="form-control" id="product-name" name="productName" required>
+        </div>
+        <div class="form-group">
+          <label for="product-quantity">Quantity:</label>
+          <input type="number" class="form-control" id="product-quantity" name="productQuantity" required>
+        </div>
+        <div class="form-group">
+          <label for="product-price">Price:</label>
+          <input type="number" class="form-control" id="product-price" name="productPrice" step="0.01" required>
+        </div>
+        <button id="add" type="submit" class="btn btn-primary">Add Product</button>
+        <button type="button" class="btn btn-secondary" id="reset-btn">Reset</button>
+      </form>
+      <br>
+      <div class="form-group my-5">
+        <label for="search-input">Search:</label>
+        <input type="search" class="form-control" id="search-input" name="search-input">
+        <button id="print" type="button" class="btn btn-primary my-3">Print</button>
+        <button id="exl" type="button" class="btn btn-primary my-3">Download as Excel</button>
+      </div>
+      <div class="table-responsive">
+        <table id="table" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+      var products = [];
+      
+      $(document).ready(function() {
+        displayTable();
+
+        $('#product-form').submit(function(event) {
+          event.preventDefault();
+          var productName = $('#product-name').val();
+          var productPrice = parseFloat($('#product-price').val());
+          var productQuantity = parseInt($('#product-quantity').val());
+          var product = {name: productName, quantity: productQuantity, price: productPrice};
+
+          var index = products.findIndex(function(p) {
+            return p.name === productName && p.price === productPrice;
+          });
+
+          if (index !== -1) {
+            products[index].quantity += productQuantity;
+          } else {
+            products.push(product);
+          }
+          
+          displayTable();
+          $('#product-form')[0].reset();
+        });
+
+        $('#reset-btn').click(function() {
+          products = [];
+          displayTable();
+        });
+      });
+      
+      function displayTable(productsArray) {
+        var tableBody = $('table tbody');
+        tableBody.empty();
+        if (!productsArray) {
+          productsArray = products;
+        }
+        for (var i = 0; i < productsArray.length; i++) {
+          var product = productsArray[i];
+          var row = '<tr><td>' + product.name + '</td><td>' + product.quantity + '</td><td>' + product.price + '</td></tr>';
+          tableBody.append(row);
+       
+        }
+      }
+
+      $('#search-input').on('keyup', function() {
+        var searchText = $(this).val().toLowerCase();
+        var filteredProducts = products.filter(function(product) {
+          return product.name.toLowerCase().includes(searchText);
+        });
+        displayTable(filteredProducts);
+      });
+    </script>
+    <script src="javascript/table2excel.js"></script>
+    <script src="javascript/main.js"></script>
+  </body>
+</html>
