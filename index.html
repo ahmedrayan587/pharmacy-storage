@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
           <label for="product-quantity">Quantity:</label>
-          <input type="number" class="form-control" id="product-quantity" name="productQuantity" required>
+          <input type="number" class="form-control" id="product-quantity" name="productQuantity" step="0.01" required>
         </div>
         <div class="form-group">
           <label for="product-price">Price:</label>
@@ -58,7 +58,7 @@
           event.preventDefault();
           var productName = $('#product-name').val();
           var productPrice = parseFloat($('#product-price').val());
-          var productQuantity = parseInt($('#product-quantity').val());
+          var productQuantity = parseFloat($('#product-quantity').val());
           var product = {name: productName, quantity: productQuantity, price: productPrice};
 
           var index = products.findIndex(function(p) {
