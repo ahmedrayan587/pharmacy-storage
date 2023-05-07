@@ -62,7 +62,7 @@
           var product = {name: productName, quantity: productQuantity, price: productPrice};
 
           var index = products.findIndex(function(p) {
-            return p.name === productName && p.price === productPrice;
+            return p.name.replace(/\s/g,'').toLowerCase() === productName.replace(/\s/g,'').toLowerCase() === productPrice;
           });
 
           if (index !== -1) {
